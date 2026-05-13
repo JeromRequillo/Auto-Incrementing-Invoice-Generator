@@ -1,28 +1,34 @@
+﻿
+#NoEnv
+SendMode Input
+SetWorkingDir %A_ScriptDir%
 
-current_num := 46434  
 
-F8::
+IniRead, current_num, settings.ini, Sequence, LastNumber, 00000
+
+!F9::
     
-    formatted_num := SubStr("0000000" . current_num, -6)
+    formatted_num := Format("{:07}", current_num)
     
     invoice_string := "AAPI" . formatted_num . "S"
     
-    Send, %invoice_string%
+
+    SendInput, %invoice_string%
     
-    ; Notification
-    ToolTip, Sent: %invoice_string%
-    SetTimer, RemoveToolTip, -2000
+
+    TrayTip, Auto-Invoice, Sent: %invoice_string%, 1
     
-    
+
     current_num += 1
+    IniWrite, %current_num%, settings.ini, Sequence, LastNumber
 return
 
-F9::
-    InputBox, NewNum, Update Sequence, Input Invoice Number, , 200, 130
+!F10::
+    InputBox, NewNum, Update Sequence, Enter the next Invoice Number starting digit:, , 250, 150
     if !ErrorLevel
+    {
         current_num := NewNum
-return
-
-RemoveToolTip:
-    ToolTip
+        IniWrite, %current_num%, settings.ini, Sequence, LastNumber
+        MsgBox, 64, Updated, Sequence is now set to: %current_num%, 2
+    }
 return
