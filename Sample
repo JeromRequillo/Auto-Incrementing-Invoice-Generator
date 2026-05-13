@@ -6,7 +6,7 @@ SetWorkingDir %A_ScriptDir%
 ; I-load ang huling number mula sa settings.ini file
 IniRead, current_num, settings.ini, Sequence, LastNumber, 46434
 
-F8::
+!F9::
     ; Mas malinis na paraan para sa padding (6 digits)
     formatted_num := Format("{:07}", current_num)
     
@@ -23,7 +23,7 @@ F8::
     IniWrite, %current_num%, settings.ini, Sequence, LastNumber
 return
 
-F9::
+!F10::
     InputBox, NewNum, Update Sequence, Enter the next Invoice Number starting digit:, , 250, 150
     if !ErrorLevel
     {
